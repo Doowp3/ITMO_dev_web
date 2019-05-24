@@ -3,7 +3,7 @@ module.exports = function (app){
 var express = require('express');
 var router =  express.Router();
 var passport = require('passport');
-const bcrypt = require('bcrypt');
+//const bcrypt = require('bcrypt');
 const{ User, Product} = require('../db');
 
 // import passport and passport-jwt modules
@@ -39,21 +39,21 @@ passport.use(strategy);
 const createUser = async ({ name, email, password }) => {
     return await User.create({ name, email, password });
 };
-  
+
 const getAllUsers = async () => {
     return await User.findAll();
 };
-  
+
 const getUser = async obj => {
     return await User.findOne({
       where: obj,
     });
 };
-  
-const createProduct = async ({ name, price,image }) => {
-    return await Product.create({ name, price,image });
+
+const createProduct = async ({ name, image,description }) => {
+    return await Product.create({ name, image,description });
 };
-  
+
 const getAllProducts = async () => {
     return await Product.findAll();
 };
@@ -64,7 +64,7 @@ const getAllProducts = async () => {
 
 // Home route
 
-router.get('/', function(req, res) {    
+router.get('/', function(req, res) {
   res.sendFile('index.html');
 });
 
@@ -86,10 +86,10 @@ router.post('/register', function(req, res, next) {
 router.post('/login', async function(req, res, next) {
   const { name, password } = req.body;
   console.log(name, password);
-  
+
   if (name && password) {
     // we get the user with the name and save the resolved promise
-    
+
     let user = await getUser({ name });
     if (!user) {
       res.status(401).json({ msg: 'No such user found', user });
@@ -101,7 +101,7 @@ router.post('/login', async function(req, res, next) {
       // the only personalized value that goes into our token
       let payload = { id: user.id };
       let token = jwt.sign(payload, jwtOptions.secretOrKey);
-      var returnJson = { msg: 'ok', token: token }; 
+      var returnJson = { msg: 'ok', token: token };
       console.log(returnJson);
       res.json(returnJson);
     } else {
@@ -113,7 +113,7 @@ router.post('/login', async function(req, res, next) {
 // logout route
 
 router.post('/logout', function(req, res, next) {
-  
+
 });
 
 // ----------------------------------------------------------------
@@ -128,16 +128,17 @@ router.get('/users', passport.authenticate('jwt',{session:false}), function(req,
 
 // Get all products
 
-router.get('/products', passport.authenticate('jwt',{session:false}), function(req, res) {       
+router.get('/products', passport.authenticate('jwt',{session:false}), function(req, res) {
   getAllProducts().then(products => res.json(products));
-}); 
+});
 
 // Add a product
 
-router.post('/addproduct', passport.authenticate('jwt',{session:false}), function(req, res) {     
-    const { name, image, price } = req.body;
-    console.log(name, image, price);
-    createProduct({ name, image, price }).then(user =>
+router.post('/addproduct', passport.authenticate('jwt',{session:false}), function(req, res) {
+    const { name, result, description } = req.body;
+    var image = result;
+    console.log(name, image, description);
+    createProduct({ name, image, description }).then(user =>
         res.json({ name, msg: 'Product created successfully' })
     );
 });

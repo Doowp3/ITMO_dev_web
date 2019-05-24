@@ -4,6 +4,7 @@ import Auth from './Auth';
 import Login from './login';
 import Signup from './signup';
 import Shop from './shop';
+import './Homepage.css';
 
 class Homepage  extends Component {
     constructor(props) {
@@ -25,7 +26,7 @@ class Homepage  extends Component {
     logout(){
         alert('logout');
 
-        // Add this token to blacklist 
+        // Add this token to blacklist
         Axios.post('/logout',{token:Auth.getToken()}).then((result)=>{
             // access results
             console.log(result);
@@ -36,22 +37,22 @@ class Homepage  extends Component {
 
         this.refreshPage();
     }
-    
+
     render() {
         var shown = {
 			display: this.state.shown ? "none" : "block"
 		};
-		
+
 		var hidden = {
             display: this.state.shown ? "block" : "none"
         };
-        
+
         return (
             <div>
             {Auth.isUserAuthenticated() ? (
-                <div>
-                    <div id="logout"><button onClick={this.logout.bind(this)}>LogOut</button></div>
-                    <Shop/>
+                <div id="main_div">
+                  <Shop/>
+                  <div id="logout"><button onClick={this.logout.bind(this)}>LogOut</button></div>
                 </div>
              ) : (
                <div id="login">
@@ -62,7 +63,6 @@ class Homepage  extends Component {
                  <div style={ hidden }>
                     <Signup refreshPage={this.refreshPage} />
                 </div>
-                  
                </div>
            )}
            </div>

@@ -1,12 +1,12 @@
 module.exports = (sequelize,Sequelize) =>{
-    const Product = sequelize.define('product', {
+    const Image = sequelize.define('image', {
         name: {
           type: Sequelize.STRING,
         },
         image: {
-          type: Sequelize.BLOB('long'),
+          type: Sequelize.STRING,
         },
-        description: {
+        owner: {
           type: Sequelize.STRING,
         },
       });
@@ -15,5 +15,5 @@ module.exports = (sequelize,Sequelize) =>{
         .then(() => console.log('Product table created successfully'))
         .catch(err => console.log('oooh, did you enter wrong database credentials?'));
     */
-    return Product;
+    return Image;
 }

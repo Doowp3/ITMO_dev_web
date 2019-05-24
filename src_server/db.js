@@ -4,21 +4,23 @@ const Sequelize = require("sequelize");
 const sequelize = new Sequelize({
     database: 'web',
     username: 'root',
-    password: 'itmo$2019',
+    password: '_zD0Xjq0',
     dialect: 'mysql',
 });
-  
+
 // check the databse connection
 sequelize
     .authenticate()
     .then(() => console.log('Connection has been established successfully.'))
     .catch(err => console.error('Unable to connect to the database:', err));
-    
+
 var UserModel = require('./models/user');
 var ProductModel = require('./models/product');
+var ImageModel = require('./models/image');
 
 const User = UserModel(sequelize, Sequelize);
 const Product = ProductModel(sequelize, Sequelize);
+const Image = ImageModel(sequelize, Sequelize);
 
 // Create database and tables if doesn't exist
 sequelize.sync()//{force:true}
